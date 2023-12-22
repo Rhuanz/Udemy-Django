@@ -1,10 +1,13 @@
 <!DOCTYPE html>
 <html lang="pt-br">
   <head>
-    <title>Django1-BoraLaCaraio</title>
+    <title>Pagina Inicial</title>
     <meta charset="utf-8">
   </head>
   <body>
-    <h1> {{texto}}</h1>
+    <h1>testando</h1>
+    {% for corretor in corretores %}
+      <a href= "{% url 'corretores' corretor.creci %}">{{corretor.nome}}</a>
+    {% endfor %}
   </body>
 </html>
