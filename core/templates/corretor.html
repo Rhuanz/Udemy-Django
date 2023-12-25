@@ -1,0 +1,13 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <title>Pagina Inicial</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="{% static 'css/estilos.css' %}">
+  </head>
+  <body>
+    <h1>Dados do corretor:</h1>
+    <h3>Nome: {{corretor.nome}} <br> Creci: {{corretor.get_creci}}</h3>
+  </body>
+</html>

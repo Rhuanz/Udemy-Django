@@ -1,0 +1,19 @@
+{% load static %} 
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <title>Pagina Inicial</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="{% static 'css/estilos.css' %}">
+  </head>
+  <body>
+    <img src="{% static 'images/imovel.jpg' %}" height="500" width="500"/>
+    <h1>Nossos corretores:</h1>
+    {% for corretor in corretores %}
+      <a href= "{% url 'corretor' corretor.get_creci %}">{{corretor.nome}}</a>
+    {% endfor %}
+    <button onclick="teste();">clica aqui</button>
+
+    <script type="text/javascript" src="{% static 'js/script.js'%}"></script>
+  </body>
+</html>

@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="pt-br">
   <head>
@@ -6,8 +7,7 @@
   </head>
   <body>
     <h1>testando</h1>
-    {% for corretor in corretores %}
-      <a href= "{% url 'corretores' corretor.creci %}">{{corretor.nome}}</a>
-    {% endfor %}
+    <a href={% url "corretores" %}>corretores</a>
+    
   </body>
 </html>
