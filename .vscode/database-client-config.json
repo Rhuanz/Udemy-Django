@@ -1,0 +1,45 @@
+{
+    "database": {
+        "1724203646857": {
+            "host": "127.0.0.1",
+            "port": 5432,
+            "user": "rhuan",
+            "password": "dbclient_a$vUn3KxpTGHLIYgXvGRctPQ==",
+            "dbType": "PostgreSQL",
+            "database": "projeto_bd",
+            "name": "Teste",
+            "advance": {
+                "hideSystemSchema": true,
+                "groupingTables": false
+            },
+            "treeFeatures": [],
+            "timezone": "+00:00",
+            "useConnectionString": false,
+            "usingSSH": false,
+            "useSocksProxy": false,
+            "useHTTPProxy": false,
+            "athena": {},
+            "bigQuery": {},
+            "global": false,
+            "savePassword": "Forever",
+            "readonly": false,
+            "sort": 11,
+            "useSSL": false,
+            "fs": {
+                "encoding": "utf8",
+                "showHidden": true
+            },
+            "dm": {
+                "usingServiceName": false
+            },
+            "httpAuth": {
+                "authType": "none"
+            },
+            "key": "1724203646857",
+            "connectionKey": "database.connections",
+            "isJdbc": false,
+            "requiredAuth": true
+        }
+    },
+    "$schema": "https://cdn.database-client.com/dbclient/schema.json"
+}

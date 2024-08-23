@@ -2,7 +2,7 @@ from django.shortcuts import render, get_object_or_404
 from django.template import loader
 from django.http import HttpResponse
 
-from .models import Corretor
+from .models import *
 #Aqui na pagina de views é possivel adicionar variaveis para o arquivo html
 #Lembrar de importar os modelos caso queira algum objeto
 
@@ -13,8 +13,8 @@ def index(request):
     }
     return render(request, 'index.html', context)
 
-def contato(request):
-    return render(request, 'contato.html')
+def imoveis(request):
+    return render(request, 'imoveis.html')
 
 def corretores(request):
     context = {

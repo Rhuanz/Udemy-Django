@@ -1,9 +1,9 @@
 from django.urls import path
-from .views import index, contato, corretores, corretor
+from .views import index, imoveis, corretores, corretor
 
 urlpatterns = [
     path('', index, name = 'index'),
-    path('contato', contato, name = 'contato'),
-    path('corretores', corretores, name = 'corretores'),
+    path('imoveis/', imoveis, name = 'imoveis'),
+    path('corretores/', corretores, name = 'corretores'),
     path('corretor/<int:nCreci>', corretor, name = 'corretor'),
 ]
