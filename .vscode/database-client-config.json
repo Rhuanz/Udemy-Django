@@ -1,6 +1,8 @@
 {
     "database": {
         "1724203646857": {
+            "key": "1724203646857",
+            "isTreeNode": true,
             "host": "127.0.0.1",
             "port": 5432,
             "user": "rhuan",
@@ -35,10 +37,10 @@
             "httpAuth": {
                 "authType": "none"
             },
-            "key": "1724203646857",
             "connectionKey": "database.connections",
             "isJdbc": false,
-            "requiredAuth": true
+            "requiredAuth": true,
+            "disable": true
         }
     },
     "$schema": "https://cdn.database-client.com/dbclient/schema.json"

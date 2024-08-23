@@ -17,7 +17,7 @@ class Corretor(models.Model):
 
 class Cliente(models.Model):
     
-    cod = models.AutoField(name='CodigoCliente', primary_key=True, default=0)
+    cod = models.AutoField(name='CodigoCliente', primary_key=True)
     nome = models.CharField('Nome', max_length=50)
     telefone = models.CharField('Telefone', max_length=15)
     corretor = models.ForeignKey(Corretor, on_delete=models.CASCADE)
@@ -27,7 +27,7 @@ class Cliente(models.Model):
 
 class Imovel (models.Model):
 
-    cod = models.AutoField(name='CodigoImovel', primary_key=True, default=0)
+    cod = models.AutoField(name='CodigoImovel', primary_key=True)
     endereco = models.CharField('Endereço', max_length=200)
     proprietario = models.CharField('Proprietario', max_length=100)
     telefone = models.CharField('Telefone', max_length=15)
