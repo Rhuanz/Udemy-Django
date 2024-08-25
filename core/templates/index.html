@@ -1,13 +1,18 @@
 {% load static %}
+{% load bootstrap4 %}
 <!DOCTYPE html>
 <html lang="pt-br">
   <head>
     <title>Pagina Inicial</title>
     <meta charset="utf-8">
+    {% bootstrap_css %}
   </head>
   <body>
-    <h1>testando</h1>
-    <a href={% url "corretores" %}>corretores</a>
+    <h1>Gestão imobiliária</h1>
+    <a href="{% url 'corretores' %}"><button>Corretores</button></a>
+    <a href="{% url 'imoveis' %}"><button>Imoveis</button></a>
+    <a href="{% url 'clientes' %}"><button>Clientes</button></a>
     
+  {% bootstrap_javascript jquery='full' %}
   </body>
 </html>

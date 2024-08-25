@@ -1,0 +1,17 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <title>Pagina imovel</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="{% static 'css/estilos.css' %}">
+  </head>
+  <body>
+    <h1>Dados do imovel:</h1>
+    <h3>Tipo de imóvel: {{imovel.TipoImovel}} <br> 
+        Endereço: {{imovel.endereco.Cep}}, {{imovel.endereco.Numero}}, {{imovel.endereco.Complemento}} <br>
+        Valor: {{imovel.ValorImovel}} <br>
+        Corretor responsável: {{imovel.corretor.nome}}
+    </h3>
+  </body>
+</html>

@@ -1,9 +1,15 @@
 from django.urls import path
-from .views import index, imoveis, corretores, corretor
+from .views import index, imoveis, corretores, corretor, cliente, clientes, imovel, cadastroimovel, cadastrocorretor, cadastrocliente
 
 urlpatterns = [
     path('', index, name = 'index'),
     path('imoveis/', imoveis, name = 'imoveis'),
+    path('imoveis/cadastro', cadastroimovel, name='cadastroimovel'),
+    path('imovel/<int:codImovel>', imovel, name='imovel'), #não pode usar o mesmo nome da coluna referente ao parâmetro (Case sensitive)
     path('corretores/', corretores, name = 'corretores'),
     path('corretor/<int:nCreci>', corretor, name = 'corretor'),
+    path('corretor/cadastro', cadastrocorretor, name='cadastrocorretor'),
+    path('clientes/', clientes, name='clientes'),
+    path('cliente/<int:codCliente>', cliente, name='cliente'),
+    path('cliente/Cadastro', cadastrocliente, name='cadastrocliente'),
 ]

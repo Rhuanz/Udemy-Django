@@ -2,16 +2,16 @@
 <!DOCTYPE html>
 <html lang="pt-br">
   <head>
-    <title>Pagina corretores</title>
+    <title>Pagina clientes</title>
     <meta charset="utf-8">
     <link rel="stylesheet" href="{% static 'css/estilos.css' %}">
   </head>
   <body>
-    <a href= "{% url 'cadastrocorretor' %}"> <button> Cadastrar corretor </button></a> 
+    <a href= "{% url 'cadastrocliente' %}"> <button> Cadastrar cliente </button></a> 
     <a href= "{% url 'index' %}"> <button> Pagina anterior </button></a> <br>
-    <h1>Corretores ativos:</h1>
-    {% for corretor in corretores %}
-      <a href= "{% url 'corretor' corretor.get_creci %}"> <button>{{corretor.nome}}</button> </a> <br>
+    <h1>Clientes:</h1>
+    {% for cliente in clientes %}
+      <a href= "{% url 'cliente' cliente.get_cod %}"> <button>{{cliente.nome}}</button> </a> <br>
     {% endfor %}
 
     <script type="text/javascript" src="{% static 'js/script.js'%}"></script>

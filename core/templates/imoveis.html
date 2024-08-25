@@ -1,12 +1,22 @@
-{% load static %}
+{% load bootstrap4 %}
 <!DOCTYPE html>
 <html lang="pt-br">
   <head>
-    <title>Corretores</title>
+    <title>Imoveis</title>
     <meta charset="utf-8">
-    <link rel="stylesheet" href="{% static 'css/estilos.css' %}">
+    {% bootstrap_css %}
   </head>
   <body>
-    <h1> 'Contatos'</h1>
+    <div class="container">
+      <a href= "{% url 'cadastroimovel'%}"> <button> Cadastrar imóvel </button></a>
+      <a href= "{% url 'index'%}"> <button>Pagina anterior</button></a> <br>
+      <h1> Imoveis disponíveis:</h1>
+      {% bootstrap_messages %}
+      {% for imovel in imoveis %}
+        <h3>Valor do imóvel: {{imovel.ValorImovel}}</h3><br>
+        <a href= "{% url 'imovel' imovel.get_cod %}"> <button>'ver'</button> </a> <br>
+      {% endfor %}
+    </div>
+    {% bootstrap_javascript jquery='full' %}
   </body>
 </html>

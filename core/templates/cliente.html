@@ -2,15 +2,15 @@
 <!DOCTYPE html>
 <html lang="pt-br">
   <head>
-    <title>Pagina Inicial</title>
+    <title>Pagina cliente</title>
     <meta charset="utf-8">
     <link rel="stylesheet" href="{% static 'css/estilos.css' %}">
   </head>
   <body>
-    <h1>Dados do corretor:</h1>
-    <h3>
-      Nome: {{corretor.nome}} <br>
-      Creci: {{corretor.get_creci}} <br>
+    <h1>Dados do cliente:</h1>
+    <h3>{{cliente.nome}} <br> 
+        Corretor responsável: {{cliente.corretor.nome}} <br>
+        Contato: {{cliente.telefone}}
     </h3>
   </body>
 </html>
