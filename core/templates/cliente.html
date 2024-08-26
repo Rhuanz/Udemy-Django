@@ -1,16 +1,23 @@
+{% load bootstrap4 %}
 {% load static %}
 <!DOCTYPE html>
 <html lang="pt-br">
   <head>
     <title>Pagina cliente</title>
     <meta charset="utf-8">
-    <link rel="stylesheet" href="{% static 'css/estilos.css' %}">
+    {% bootstrap_css %}
+    <link rel="stylesheet" href="{% static 'css/estilos.css' %}" rel="stylesheet">
   </head>
   <body>
+    <div class="container">
+    <a href= "{% url 'clientes' %}"> <button> Pagina anterior </button></a> <br>
     <h1>Dados do cliente:</h1>
     <h3>{{cliente.nome}} <br> 
         Corretor responsável: {{cliente.corretor.nome}} <br>
         Contato: {{cliente.telefone}}
     </h3>
+    
+    </div>
+    {% bootstrap_javascript jquery='full' %}
   </body>
 </html>

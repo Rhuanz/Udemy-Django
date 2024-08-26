@@ -68,7 +68,7 @@ class Imovel (models.Model):
 
     cod = models.AutoField(name='CodImovel', primary_key=True, db_index=True)
     tipo = models.CharField(name='TipoImovel', max_length=15)
-    endereco = models.ForeignKey(Endereco, on_delete=models.CASCADE)
+    endereco = models.OneToOneField(Endereco, on_delete=models.CASCADE)
     proprietario = models.ForeignKey(Proprietario, on_delete=models.CASCADE)
     valor = models.DecimalField(name='ValorImovel', max_digits=9, decimal_places=2)
     corretor = models.ForeignKey(Corretor, on_delete=models.CASCADE)
@@ -102,7 +102,7 @@ class Venda (models.Model):
 
     cod = models.AutoField(name='CodVenda', primary_key=True, db_index=True)
     data = models.DateField(name='Data da venda')
-    imovel = models.ForeignKey(Imovel, on_delete=models.CASCADE)
+    imovel = models.OneToOneField(Imovel, on_delete=models.CASCADE)
     cliente = models.ForeignKey(Cliente, on_delete=models.CASCADE)
     fPagamento = models.CharField(name='Forma de pagamento', max_length=50)
     entrada = models.BooleanField(name='Entrada', default=True)

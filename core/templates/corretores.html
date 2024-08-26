@@ -1,19 +1,37 @@
+{% load bootstrap4 %}
 {% load static %} 
 <!DOCTYPE html>
 <html lang="pt-br">
   <head>
     <title>Pagina corretores</title>
     <meta charset="utf-8">
+    {% bootstrap_css %}
     <link rel="stylesheet" href="{% static 'css/estilos.css' %}">
   </head>
   <body>
+    <div class="container">
     <a href= "{% url 'cadastrocorretor' %}"> <button> Cadastrar corretor </button></a> 
-    <a href= "{% url 'index' %}"> <button> Pagina anterior </button></a> <br>
-    <h1>Corretores ativos:</h1>
+    <a href="{% url 'atualizarcorretor' %}"><button>Editar Corretor</button></a>
+    <a href="{% url 'deletarcorretor' %}"><button>Deletar Corretor</button></a>
+    <a href= "{% url 'index' %}"> <button> Pagina anterior </button></a><br>
+    <div>
+      {% bootstrap_messages %}
+      <form action="{% url 'corretores' %}" method="post" class="form" autocomplete="off">
+        {% csrf_token %}
+        {% bootstrap_form form %}
+        {% buttons %}
+            <button type="submit" class="btn btn-primary">Buscar</button>
+        {% endbuttons %}
+      </form><br>
+    </div>
+    <h1>Corretores:</h1>
+    {% if corretores %}
     {% for corretor in corretores %}
       <a href= "{% url 'corretor' corretor.get_creci %}"> <button>{{corretor.nome}}</button> </a> <br>
     {% endfor %}
-
-    <script type="text/javascript" src="{% static 'js/script.js'%}"></script>
+    {% endif %}
+    
+    </div>
+    {% bootstrap_javascript jquery='full' %}
   </body>
 </html>

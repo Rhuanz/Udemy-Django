@@ -1,12 +1,15 @@
+{% load bootstrap4 %}
 {% load static %} 
 <!DOCTYPE html>
 <html lang="pt-br">
   <head>
     <title>Pagina clientes</title>
     <meta charset="utf-8">
+    {% bootstrap_css %}
     <link rel="stylesheet" href="{% static 'css/estilos.css' %}">
   </head>
   <body>
+    <div class="container">
     <a href= "{% url 'cadastrocliente' %}"> <button> Cadastrar cliente </button></a> 
     <a href= "{% url 'index' %}"> <button> Pagina anterior </button></a> <br>
     <h1>Clientes:</h1>
@@ -14,6 +17,7 @@
       <a href= "{% url 'cliente' cliente.get_cod %}"> <button>{{cliente.nome}}</button> </a> <br>
     {% endfor %}
 
-    <script type="text/javascript" src="{% static 'js/script.js'%}"></script>
+    {% bootstrap_javascript jquery='full' %}
+    </div>
   </body>
 </html>
