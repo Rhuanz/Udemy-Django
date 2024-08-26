@@ -1,16 +1,22 @@
 {% load static %}
+{% load bootstrap4 %}
 <!DOCTYPE html>
 <html lang="pt-br">
   <head>
     <title>Pagina Inicial</title>
     <meta charset="utf-8">
+    {% bootstrap_css %}
     <link rel="stylesheet" href="{% static 'css/estilos.css' %}">
   </head>
   <body>
-    <h1>Dados do corretor:</h1>
-    <h3>
-      Nome: {{corretor.nome}} <br>
-      Creci: {{corretor.get_creci}} <br>
-    </h3>
+    <div class="container">
+      <a href= "{% url 'corretores' %}"> <button> Pagina anterior </button></a><br>
+      <h2>Dados do corretor</h2>
+      <h3>
+        Nome: {{corretor.nome}} <br>
+        Creci: {{corretor.get_creci}} <br>
+      </h3>
+    </div>
+    {% bootstrap_javascript jquery='full' %}
   </body>
 </html>

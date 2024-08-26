@@ -11,17 +11,18 @@
   <body>
  
     <div class="container">
-        <h1> Formlário de cadastro de corretor</h1>
-        {% bootstrap_messages %}
-        <form action="{% url 'cadastrocorretor' %}" method="post" class="form" autocomplete="off" enctype="multipart/form-data">
-            {% csrf_token %}
+      <a href= "{% url 'corretores' %}"> <button> Voltar a página anterior </button></a> <br>
+      <h2> Formlário de cadastro de corretor</h2>
+      {% bootstrap_messages %}
+      <form action="{% url 'cadastrocorretor' %}" method="post" class="form" autocomplete="off" enctype="multipart/form-data">
+          {% csrf_token %}
 
-            {% bootstrap_form form %}
-            {% buttons %}
-                <button type="submit" class="btn-primary">Cadastrar</button>
-            {% endbuttons %}
-        </form>
-        <a href= "{% url 'corretores' %}"> <button> Voltar a página anterior </button></a> <br>
+          {% bootstrap_form form %}
+          {% buttons %}
+              <button type="submit" class="btn-primary">Cadastrar</button>
+          {% endbuttons %}
+      </form>
+        
     </div>
     {% bootstrap_javascript jquery='full' %}
   </body>

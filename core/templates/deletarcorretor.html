@@ -12,6 +12,7 @@
     <div class="container">
     <a href= "{% url 'corretores' %}"> <button> Pagina anterior </button></a><br>
     <div>
+      <h2> Dados do corretor a ser deletado</h2>
       {% bootstrap_messages %}
       <form action="{% url 'deletarcorretor' %}" method="post" class="form" autocomplete="off">
         {% csrf_token %}

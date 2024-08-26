@@ -62,14 +62,16 @@ def cadastroimovel(request):
 
 def corretores(request):
 
-    if str(request.method) == 'POST':
-        form = BuscaCorretorNomeForm(request.POST or None)
-        if form.is_valid():
-            nome = form.cleaned_data['nome']
-            corretores = Corretor.objects.raw('SELECT * FROM core_corretor WHERE nome = %s', [nome])
-            form = BuscaCorretorNomeForm()
-            if not corretores:
-                messages.error(request, 'Corretor não encontrado')
+    form = BuscaCorretorNomeForm(request.POST)
+    if form.is_valid():
+        nome = form.cleaned_data['nome']
+        corretores = Corretor.objects.raw('SELECT * FROM core_corretor WHERE nome = %s', [nome])
+        form = BuscaCorretorNomeForm()
+
+        if corretores.__len__() > 0:
+            messages.success(request, 'Corretor encontrado')
+        else:
+            messages.error(request, 'Corretor não encontrado')
     else:
         corretores = Corretor.objects.all()
         form = BuscaCorretorNomeForm(initial={'corretores': corretores}) #é necessário um valor inicial para o formulário
@@ -93,9 +95,8 @@ def cadastrocorretor(request):
     if str(request.method) == 'POST':
         form = CorretorModelForm(request.POST)
         if form.is_valid():
+            
             form.save()
-
-
             messages.success(request, 'Corretor cadastrado com sucesso!') #Mensagem de sucesso ao cadastrar corretor
             form = CorretorModelForm() #limpar os dados do formulários preenchido
         else:

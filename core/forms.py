@@ -7,13 +7,13 @@ class BuscaCorretorNomeForm(forms.Form):
 
 class EdtCorretorForm(forms.Form):
 
-    creci = forms.CharField(label='Creci do corretor', max_length=5)
+    creci = forms.CharField(label='Creci do corretor', max_length=7)
     novonome = forms.CharField(label='Novo nome', max_length=30)
 
 class DelCorretorForm(forms.Form):
 
     nome = forms.CharField(label='Nome do corretor', max_length= 30, widget=forms.TextInput())
-    creci = forms.CharField(label='Creci do corretor', max_length=5)
+    creci = forms.CharField(label='Creci do corretor', max_length=7)
 
 
 class CorretorModelForm(forms.ModelForm):
