@@ -10,12 +10,14 @@
   </head>
   <body>
     <div class="container">
-      <a href= "{% url 'cadastroimovel'%}"> <button> Cadastrar imóvel </button></a>
-      <a href= "{% url 'index'%}"> <button>Pagina anterior</button></a> <br>
+      <a href= "{% url 'index'%}"> <button> Pagina anterior </button></a>
+      <a href= "{% url 'cadastroimovel'%}"> <button> Cadastrar imóvel </button></a> <br>
       <h1> Imoveis disponíveis:</h1>
       {% bootstrap_messages %}
       {% for imovel in imoveis %}
-        <h3>Valor do imóvel: {{imovel.ValorImovel}}</h3><br>
+        <h3>Valor do imóvel: {{imovel.ValorImovel}}<br>
+            Local: {{imovel.endereco.Bairro}}, {{imovel.endereco.Cidade}}
+        </h3><br>
         <a href= "{% url 'imovel' imovel.get_cod %}"> <button>'ver'</button> </a> <br>
       {% endfor %}
     </div>

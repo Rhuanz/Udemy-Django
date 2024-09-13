@@ -3,20 +3,20 @@ from .models import Cliente, Imovel, Corretor, Proprietario, Venda, Acompanhamen
 # Register your models here.
 
 class ClienteAdmin(admin.ModelAdmin):
-    list_display = ('CodCliente','nome', 'telefone') #mostrando mais de um item na consulta de clientes da página admin
+    list_display = ('CodCliente','Nome', 'Telefone') #mostrando mais de um item na consulta de clientes da página admin
 
 class ImovelAdmin(admin.ModelAdmin):
     list_display = ('CodImovel', 'TipoImovel', 'ValorImovel') #Lembrar de usar o nome definido no parâmetro e não o nome da variável
 
 @admin.register(Corretor)
 class CorretorAdmin(admin.ModelAdmin):
-    list_display = ('nome', 'creci', 'Slug') 
+    list_display = ('Nome', 'Creci', 'Ativo') 
 
 class ProprietarioAdmin(admin.ModelAdmin):
     list_display = ('Nome', 'Telefone')
 
 class EnderecoAdmin(admin.ModelAdmin):
-    list_display = ('CodEndereco', 'Cep', 'Numero')
+    list_display = ('CodEndereco', 'Bairro', 'Cidade', 'Rua', 'Numero')
 
 class VisitaAdmin(admin.ModelAdmin):
     list_display = ('CodVisita', 'Cliente', 'Imovel', 'DataVisita')

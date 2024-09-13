@@ -1,17 +1,24 @@
 {% load static %}
+{% load bootstrap4 %}
 <!DOCTYPE html>
 <html lang="pt-br">
   <head>
     <title>Pagina imovel</title>
     <meta charset="utf-8">
+    {% bootstrap_css %}
     <link rel="stylesheet" href="{% static 'css/estilos.css' %}">
   </head>
   <body>
-    <h1>Dados do imovel:</h1>
+    <div class="container">
+    <a href= "{% url 'imoveis' %}"> <button> Pagina anterior</button></a>
+
     <h3>Tipo de imóvel: {{imovel.TipoImovel}} <br> 
-        Endereço: {{imovel.endereco.Cep}}, {{imovel.endereco.Numero}}, {{imovel.endereco.Complemento}} <br>
+        Local: {{imovel.endereco.Rua}}, {{imovel.endereco.Complemento}}, {{imovel.endereco.Bairro}}, {{imovel.endereco.Cidade}}<br>
         Valor: {{imovel.ValorImovel}} <br>
         Corretor responsável: {{imovel.corretor.nome}}
     </h3>
+    
+    </div>
+    {% bootstrap_javascript jquery='full' %}
   </body>
 </html>

@@ -28,7 +28,7 @@
     <h1>Corretores</h1>
     {% if corretores %}
     {% for corretor in corretores %}
-      <a href= "{% url 'corretor' corretor.get_creci %}"> <button>{{corretor.nome}}</button> </a> <br>
+      <a href= "{% url 'corretor' corretor.get_creci %}"> <button>{{corretor.Nome}}</button> </a> <br>
     {% endfor %}
     {% endif %}
     

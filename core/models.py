@@ -1,49 +1,66 @@
 from django.db import models
 from stdimage.models import StdImageField
 
+import uuid
+
 #SIGNALS (Aparentemente é para pré processamento dos formulários)
 from django.db.models import signals
 from django.template.defaultfilters import slugify
 
+#função para criar um nome aleatório para o arquivo
+def get_file_path(_instance, filename):
+    ext = filename.split('.')[-1] #Tirando a extenção do arquivo do nome
+    filename = f'{uuid.uuid4()}.{ext}' #Criando o nome e juntando a extenção
+    return filename
 
-# Create your models here.
-class Corretor(models.Model):
+#Classe base com metadados de criação e modificação
+class Base(models.Model):
 
-    nome = models.CharField('Nome', max_length = 50)
-    creci = models.CharField('Creci', max_length= 7, primary_key=True, unique=True)
-    slug = models.SlugField(name='Slug', max_length=50, blank=True, editable=False)
+    criado = models.DateField(name='Criação', auto_now_add=True) #O auto_now_add adiciona a data de criação automaticamente
+    modificado = models.DateField(name='Modificado', auto_now=True) #Auto_now altera a data de modificação sempre que o objeto for modificado
+
+    class Meta:
+        abstract = True
+
+#Classe modelo para corretor
+class Corretor(Base):
+
+    nome = models.CharField(name='Nome', max_length = 50)
+    creci = models.CharField(name='Creci', max_length= 7, primary_key=True, unique=True)
+    ativo = models.BooleanField(name='Ativo', default=True)
 
     def __str__(self):
-        return f'{self.nome} {self.creci}'
+        return f'{self.Nome} {self.Creci}'
     
     def get_creci(self):
-        return self.creci
-    
-def corretor_pre_save(signal, instance, sender, **kwargs):
-    instance.slug = slugify(instance.nome)
+        return self.Creci
 
-signals.pre_save.connect(corretor_pre_save, sender=Corretor)
 
-class Cliente(models.Model):
+#Classe modelo para clientes
+class Cliente(Base):
     
     cod = models.AutoField(name='CodCliente', primary_key=True, db_index=True)
-    nome = models.CharField('Nome', max_length=50)
-    telefone = models.CharField('Telefone', max_length=15)
+    nome = models.CharField(name= 'Nome', max_length=50)
+    telefone = models.CharField(name= 'Telefone', max_length=15)
     corretor = models.ForeignKey(Corretor, on_delete=models.CASCADE)
+    ativo = models.BooleanField(name='Ativo', default=True)
+    compra = models.BooleanField(name='Comprou', default=False)
 
-    def __str__(self):
-        return f'{self.nome}, {self.telefone}' #mostra o nome do cliente produto na lista, Lembrar de usar os nomes dados as colunas
+    def __str__(self): #A função str serve para exibição dos objetos na página de administrador
+        return f'{self.Nome}, {self.Telefone}' 
     
     def get_name(self):
-        return self.nome
+        return self.Nome
     
     def get_tel(self):
-        return self.telefone
+        return self.Telefone
     
     def get_cod(self):
         return self.CodCliente
 
-class Proprietario(models.Model):
+
+#Classe modelo para proprietário
+class Proprietario(Base):
 
     cod = models.AutoField(name='CodProprietario', primary_key=True, db_index=True)
     nome = models.CharField(name='Nome', max_length=50)
@@ -53,26 +70,31 @@ class Proprietario(models.Model):
         return f'{self.Nome} {self.Telefone}'
 
 
-class Endereco(models.Model):
+#Classe modelo para o endereço
+class Endereco(Base):
 
     cod = models.AutoField(name='CodEndereco', primary_key=True, db_index=True)
-    cep = models.CharField(name='Cep', max_length=8, null=False)
+    rua = models.CharField(name='Rua', max_length=40)
+    bairro = models.CharField(name='Bairro', max_length=25)
     num = models.IntegerField(name='Numero')
+    cidade = models.CharField(name='Cidade', max_length=30)
     comp = models.CharField(name = 'Complemento', max_length=8)
 
     def __str__(self):
         return f'{self.Cep}, {self.Numero}, {self.Complemento}' #usar os nomes dados as colunas
 
 
-class Imovel (models.Model):
+#Classe modelo para imóveis
+class Imovel (Base):
 
     cod = models.AutoField(name='CodImovel', primary_key=True, db_index=True)
     tipo = models.CharField(name='TipoImovel', max_length=15)
-    endereco = models.OneToOneField(Endereco, on_delete=models.CASCADE)
+    endereco = models.OneToOneField(Endereco, on_delete=models.CASCADE, unique=True)
     proprietario = models.ForeignKey(Proprietario, on_delete=models.CASCADE)
     valor = models.DecimalField(name='ValorImovel', max_digits=9, decimal_places=2)
     corretor = models.ForeignKey(Corretor, on_delete=models.CASCADE)
-    disponivel = models.BooleanField('Disponível?', default=True)
+    disponivel = models.BooleanField(name='Disponivel', default=True)
+    fotos = StdImageField(name='Fotos', upload_to=get_file_path, variations={'thumb': (300, 300)})
 
     def __str__(self):
         return f'{self.CodImovel}, {self.TipoImovel}, {self.proprietario}'
@@ -80,7 +102,8 @@ class Imovel (models.Model):
     def get_cod(self):
         return self.CodImovel
 
-class Visita (models.Model):
+#Classe modelo para visitas
+class Visita (Base):
 
     cod = models.AutoField(name='CodVisita', primary_key=True, db_index=True)
     cliente = models.ForeignKey(Cliente, on_delete=models.CASCADE)
@@ -88,9 +111,10 @@ class Visita (models.Model):
     data = models.DateField(name='DataVisita')
 
     def __str__(self):
-        return f'{self.codVisita}, {self.cliente}, {self.imovel}, {self.DataVisita}'
+        return f'{self.CodVisita}, {self.cliente}, {self.imovel}, {self.DataVisita}'
 
-class Acompanhamento (models.Model):
+#Classe modelo para acompanhamentos
+class Acompanhamento (Base):
 
     visita = models.ForeignKey(Visita, on_delete=models.CASCADE)
     corretor = models.ForeignKey(Corretor, on_delete=models.CASCADE)
@@ -98,7 +122,8 @@ class Acompanhamento (models.Model):
     def __str__(self):
         return f'{self.corretor}, {self.visita}'
 
-class Venda (models.Model):
+#Classe modelo para vendas
+class Venda (Base):
 
     cod = models.AutoField(name='CodVenda', primary_key=True, db_index=True)
     data = models.DateField(name='Data da venda')
@@ -107,12 +132,12 @@ class Venda (models.Model):
     fPagamento = models.CharField(name='Forma de pagamento', max_length=50)
     entrada = models.BooleanField(name='Entrada', default=True)
     valorF = models.DecimalField(name='Valor final', max_digits=9, decimal_places=2)
-    fotos = StdImageField(name='Fotos', upload_to='imoveis', variations={'thumb': (300, 300)})
 
     def __str__(self):
-        return f'{self.codVenda}, {self.cliente}, {self.imovel}'
+        return f'{self.CodVenda}, {self.cliente}, {self.imovel}'
 
-class Intermedio (models.Model):
+#Classe modelo para intermédios(Corretores envolvidos na venda)
+class Intermedio (Base):
 
     corretor = models.ForeignKey(Corretor, on_delete=models.CASCADE)
     venda = models.ForeignKey(Venda, on_delete=models.CASCADE)

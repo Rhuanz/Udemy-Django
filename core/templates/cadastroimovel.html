@@ -11,7 +11,8 @@
   <body>
     
     <div class="container">
-        <h1> Formlário de cadastro de imóvel</h1>
+        <a href= "{% url 'imoveis' %}"> <button> Voltar a página anterior </button></a> <br>
+        <h1> Informe os dados do imóvel</h1>
         {% bootstrap_messages %}
         <form action="{% url 'cadastroimovel' %}" method="post" class="form" autocomplete="off" enctype="multipart/form-data">
             {% csrf_token %}
@@ -21,7 +22,6 @@
                 <button type="submit" class="btn-primary">Cadastrar</button>
             {% endbuttons %}
         </form>
-        <a href= "{% url 'imoveis' %}"> <button> Voltar a página anterior </button></a> <br>
     </div>
     {% bootstrap_javascript jquery='full' %}
   </body>

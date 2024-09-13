@@ -5,7 +5,9 @@ from django.contrib import messages
 from django.shortcuts import redirect
 from django.http import HttpResponseRedirect
 from django.db import connection
-from django.urls import reverse
+
+#Usando class based view
+from django.views.generic import TemplateView
 
 
 from .models import Corretor, Cliente, Imovel
@@ -13,13 +15,8 @@ from .forms import CorretorModelForm, ImovelModelForm, ClienteModelForm, BuscaCo
 #Aqui na pagina de views é possivel adicionar variaveis para o arquivo html
 #Lembrar de importar os modelos caso queira algum objeto
 
-def index(request):
-
-    context = { #isso aqui é um dicionário pra passar tudo para o template
-        'texto':  'Só testando'
-    }
-    return render(request, 'index.html', context)
-
+class IndexView(TemplateView):
+    template_name = 'index.html'
 
 def imoveis(request):
 
@@ -42,21 +39,17 @@ def imovel(request, codImovel):
 
 def cadastroimovel(request):
 
-    if str(request.method) == 'POST':
-        form = ImovelModelForm(request.POST, request.FILES)
-        if form.is_valid():
-            imov = form.save(commit=False)
-
-            messages.success(request, 'Imovel cadastrado com sucesso!') #Mensagem de sucesso ao cadastrar imóvel
-            form = ImovelModelForm() #limpar os dados do formulários preenchido
-        else:
-            messages.error(request, 'Erro ao cadastrar imóvel')
+    form = ImovelModelForm(request.POST, request.FILES)
+    if form.is_valid():
+        form.save() #Salvando no banco de dados
+        form = ImovelModelForm()#limpar os dados do formulários preenchido
+        messages.success(request, 'Imovel cadastrado com sucesso!') #Mensagem de sucesso ao cadastrar imóvel
     else:
         form = ImovelModelForm()
 
     context = {
         'form': form
-        }
+    }
     return render(request, 'cadastroimovel.html', context)
 
 
@@ -65,7 +58,7 @@ def corretores(request):
     form = BuscaCorretorNomeForm(request.POST)
     if form.is_valid():
         nome = form.cleaned_data['nome']
-        corretores = Corretor.objects.raw('SELECT * FROM core_corretor WHERE nome = %s', [nome])
+        corretores = Corretor.objects.raw('SELECT * FROM core_corretor WHERE Nome = %s', [nome])
         form = BuscaCorretorNomeForm()
 
         if corretores.__len__() > 0:
@@ -86,14 +79,16 @@ def corretor(request, nCreci):
    
     context = {
         #'corretor': Corretor.objects.get(creci = nCreci)
-        'corretor': get_object_or_404(Corretor, creci = nCreci)
+        'corretor': get_object_or_404(Corretor, Creci = nCreci)
     }
     return render(request, 'corretor.html', context)
 
 def cadastrocorretor(request):
 
     if str(request.method) == 'POST':
+
         form = CorretorModelForm(request.POST)
+
         if form.is_valid():
             
             form.save()
@@ -116,11 +111,17 @@ def atualizarcorretor(request):
         if form.is_valid():
             creci = form.cleaned_data['creci']
             novonome = form.cleaned_data['novonome']
+            status = form.cleaned_data['status']
             form = EdtCorretorForm()
-            if get_object_or_404(Corretor, creci = creci):
-                with connection.cursor() as cursor:
-                    cursor.execute("UPDATE core_corretor SET nome = %s WHERE creci = %s", [novonome, creci])
-                    messages.success(request, 'Corretor atualizado com sucesso!') #Mensagem de sucesso ao cadastrar imóvel
+            if get_object_or_404(Corretor, Creci = creci):
+
+                corretor = Corretor.objects.get(Creci = creci)
+                corretor.Nome = novonome
+                corretor.Ativo = status
+                corretor.save()
+                #with connection.cursor() as cursor:
+                    #cursor.execute("UPDATE core_corretor SET nome = %s WHERE creci = %s", [novonome, creci])
+                messages.success(request, 'Corretor atualizado com sucesso!') #Mensagem de sucesso ao cadastrar imóvel
                 return HttpResponseRedirect("/corretores")
             
         else:
@@ -143,13 +144,13 @@ def deletarcorretor(request):
             creci = form.cleaned_data['creci']
             
             form = DelCorretorForm()
-            if get_object_or_404(Corretor, creci = creci):
-                with connection.cursor() as cursor:
-                    with connection.cursor() as cursor:
-                        cursor.execute('DELETE FROM core_corretor WHERE creci = %s AND nome= %s', [creci, nome])
-                    messages.success(request, 'Corretor deletado com sucesso!') #Mensagem de sucesso ao cadastrar imóvel
+            if get_object_or_404(Corretor, Creci = creci):
+                Corretor.objects.get(Creci = creci, Nome=nome).delete()
+                #with connection.cursor() as cursor:
+                    #cursor.execute('DELETE FROM core_corretor WHERE "Creci" = %s AND "Nome" = %s', [creci, nome])
+                messages.success(request, 'Corretor deletado com sucesso!') #Mensagem de sucesso ao cadastrar imóvel
                 return HttpResponseRedirect("/corretores")             
-
+            
         else:
             form = DelCorretorForm(initial={'nome': ''}) #é necessário um valor inicial para o formulário 
             
