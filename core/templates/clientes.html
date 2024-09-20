@@ -10,8 +10,9 @@
   </head>
   <body>
     <div class="container">
-    <a href= "{% url 'cadastrocliente' %}"> <button> Cadastrar cliente </button></a> 
-    <a href= "{% url 'index' %}"> <button> Pagina anterior </button></a> <br>
+    <a href= "{% url 'index' %}"> <button> Pagina anterior </button></a>
+    <a href= "{% url 'cadastrocliente' %}"> <button> Cadastrar cliente </button></a> <br>
+    
     <h1>Clientes:</h1>
     {% for cliente in clientes %}
       <a href= "{% url 'cliente' cliente.get_cod %}"> <button>{{cliente.nome}}</button> </a> <br>
