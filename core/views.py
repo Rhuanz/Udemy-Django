@@ -4,16 +4,14 @@ from django.http import HttpResponse
 from django.contrib import messages
 from django.shortcuts import redirect
 from django.http import HttpResponseRedirect
-from django.db import connection
+#from django.db import connection
 
 #Usando class based view
 from django.views.generic import TemplateView
 
-
 from .models import Corretor, Cliente, Imovel
-from .forms import CorretorModelForm, ImovelModelForm, ClienteModelForm, BuscaCorretorNomeForm, DelCorretorForm, EdtCorretorForm
-#Aqui na pagina de views é possivel adicionar variaveis para o arquivo html
-#Lembrar de importar os modelos caso queira algum objeto
+from .forms import CorretorModelForm, ImovelModelForm, ClienteModelForm, BuscaCorretorNomeForm
+from .forms import DelCorretorForm, EdtCorretorForm, EnderecoModelForm, ProprietarioModelForm
 
 class IndexView(TemplateView):
     template_name = 'index.html'
@@ -52,13 +50,35 @@ def cadastroimovel(request):
     }
     return render(request, 'cadastroimovel.html', context)
 
+def cadastroendereco(request):
+
+    form = EnderecoModelForm(request.POST)
+    if form.is_valid():
+        form.save()
+        form = EnderecoModelForm()
+        messages.success(request, 'Endereço cadastrado com sucesso!')
+    else:
+        form = EnderecoModelForm()
+    context = {'form': form}
+    return render(request, 'cadastroendereco.html', context)
+    
+def cadastroproprietario(request):
+    form = ProprietarioModelForm(request.POST)
+    if form.is_valid():
+        form.save()
+        form = ProprietarioModelForm()
+        messages.success(request, 'Proprietario cadastrado com sucesso!')
+    else:
+        form = ProprietarioModelForm()
+    context = {'form': form}
+    return render(request, 'cadastroproprietario.html', context)
 
 def corretores(request):
 
     form = BuscaCorretorNomeForm(request.POST)
     if form.is_valid():
         nome = form.cleaned_data['nome']
-        corretores = Corretor.objects.raw('SELECT * FROM core_corretor WHERE Nome = %s', [nome])
+        corretores = Corretor.objects.raw('SELECT * FROM core_corretor WHERE "Nome" = %s', [nome]) #lembrar de colocar aspas no nome da coluna para que diferencie maiuscula e minúscula
         form = BuscaCorretorNomeForm()
 
         if corretores.__len__() > 0:

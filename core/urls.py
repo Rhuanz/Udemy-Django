@@ -1,6 +1,6 @@
 from django.urls import path
 from .views import IndexView, imoveis, corretores, corretor, cliente, clientes, imovel, cadastroimovel, cadastrocorretor, cadastrocliente, atualizarcorretor, deletarcorretor
-
+from .views import cadastroendereco, cadastroproprietario
 urlpatterns = [
     path('', IndexView.as_view(), name = 'index'),
     path('imoveis/', imoveis, name = 'imoveis'),
@@ -14,4 +14,6 @@ urlpatterns = [
     path('clientes/', clientes, name='clientes'),
     path('cliente/<int:codCliente>', cliente, name='cliente'),
     path('cliente/Cadastro', cadastrocliente, name='cadastrocliente'),
+    path('imoveis/cadastro/endereco', cadastroendereco, name='cadastroendereco'),
+    path('imoveis/cadastro/proprietario', cadastroproprietario, name='cadastroproprietario'),
 ]

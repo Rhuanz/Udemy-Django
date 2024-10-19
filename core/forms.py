@@ -1,5 +1,5 @@
 from django import forms
-from .models import Corretor, Cliente, Imovel
+from .models import Corretor, Cliente, Imovel, Endereco, Proprietario
 
 class BuscaCorretorNomeForm(forms.Form):
 
@@ -29,6 +29,19 @@ class ClienteModelForm(forms.ModelForm):
         model = Cliente
         fields = ['CodCliente', 'Nome', 'Telefone', 'corretor']
 
+class EnderecoModelForm(forms.ModelForm):
+
+    class Meta:
+        model = Endereco
+        fields = ['CodEndereco', 'Rua', 'Bairro', 'Numero', 'Cidade', 'Complemento']
+
+class ProprietarioModelForm(forms.ModelForm):
+    
+    class Meta:
+        model = Proprietario
+        fields = ['CodProprietario', 'Nome', 'Telefone']
+
+        
 class ImovelModelForm(forms.ModelForm):
 
     class Meta:

@@ -81,7 +81,7 @@ class Endereco(Base):
     comp = models.CharField(name = 'Complemento', max_length=8)
 
     def __str__(self):
-        return f'{self.Cep}, {self.Numero}, {self.Complemento}' #usar os nomes dados as colunas
+        return f'{self.Rua}, {self.Numero}, {self.Complemento}' #usar os nomes dados as colunas
 
 
 #Classe modelo para imóveis

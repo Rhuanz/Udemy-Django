@@ -1,0 +1,30 @@
+{% load bootstrap4 %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <title>Proprietário imóvel</title>
+    <meta charset="utf-8">
+    {% bootstrap_css %}
+    <link rel="stylesheet" href="{% static 'css/estilos.css' %}" rel="stylesheet">
+  </head>
+  <body>
+ 
+    <div class="container">
+      <a href= "{% url 'cadastroendereco' %}"> <button> Voltar a página anterior </button></a>
+      <a href= "{% url 'cadastroimovel' %}"> <button> Próxima etapa </button></a> <br>
+      <h2> Formlário de cadastro de proprietário</h2>
+      {% bootstrap_messages %}
+      <form action="{% url 'cadastroproprietario' %}" method="post" class="form" autocomplete="off" enctype="multipart/form-data">
+          {% csrf_token %}
+
+          {% bootstrap_form form %}
+          {% buttons %}
+              <button type="submit" class="btn-primary">Cadastrar</button>
+          {% endbuttons %}
+      </form>
+        
+    </div>
+    {% bootstrap_javascript jquery='full' %}
+  </body>
+</html>
