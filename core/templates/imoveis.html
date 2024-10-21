@@ -11,14 +11,28 @@
   <body>
     <div class="container">
       <a href= "{% url 'index'%}"> <button> Pagina anterior </button></a>
-      <a href= "{% url 'cadastroendereco'%}"> <button> Cadastrar imóvel </button></a> <br>
-      <h1> Imoveis disponíveis:</h1>
+      <a href= "{% url 'cadastroendereco'%}"> <button> Cadastrar imóvel </button></a> 
+      <a href= "{% url 'atualizarimovel'%}"> <button> Atualizar imovel </button></a> <br>
+      <h1> Imoveis disponíveis:</h1> <br>
       {% bootstrap_messages %}
+
+      <form action="{% url 'imoveis' %}" method="post" class="form" autocomplete="off">
+        {% csrf_token %}
+        {% bootstrap_form form %}
+        {% buttons %}
+            <button type="submit" class="btn btn-primary">Buscar</button>
+        {% endbuttons %}
+        {% bootstrap_form form2 %}
+        {% buttons %}
+            <button type="submit" class="btn btn-primary">Buscar</button>
+        {% endbuttons %}
+      </form><br>
       {% for imovel in imoveis %}
-        <h3>Valor do imóvel: {{imovel.ValorImovel}}<br>
-            Local: {{imovel.endereco.Bairro}}, {{imovel.endereco.Cidade}}
-        </h3><br>
-        <a href= "{% url 'imovel' imovel.get_cod %}"> <button>'ver'</button> </a> <br>
+        <img>{{imovel.Fotos}}
+        <h3>{{imovel.TipoImovel}} em {{imovel.endereco.Bairro}}, {{imovel.endereco.Cidade}}<br>
+            Por apenas: R$ {{imovel.ValorImovel}} 
+        </h3>
+        <a href= "{% url 'imovel' imovel.get_cod %}"> <button>Ver detalhes</button> </a> <br> <br>
       {% endfor %}
     </div>
     {% bootstrap_javascript jquery='full' %}

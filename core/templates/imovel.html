@@ -13,9 +13,15 @@
     <a href= "{% url 'imoveis' %}"> <button> Pagina anterior</button></a>
 
     <h3>Tipo de imóvel: {{imovel.TipoImovel}} <br> 
-        Local: {{imovel.endereco.Rua}}, {{imovel.endereco.Complemento}}, {{imovel.endereco.Bairro}}, {{imovel.endereco.Cidade}}<br>
+        Local: {{imovel.endereco.Rua}},
+        {% if imovel.endereco.Complemento %}
+        {{imovel.endereco.Complemento}}, {{imovel.endereco.Bairro}}, {{imovel.endereco.Cidade}}<br>
+        {% else %}
+        {{imovel.endereco.Bairro}}, {{imovel.endereco.Cidade}}<br>
+        {%endif%}
         Valor: {{imovel.ValorImovel}} <br>
-        Corretor responsável: {{imovel.corretor.nome}}
+        Corretor responsável: {{imovel.corretor.Nome}} <br>
+        Codigo do imóvel: {{imovel.CodImovel}}
     </h3>
     
     </div>

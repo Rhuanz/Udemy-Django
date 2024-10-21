@@ -13,7 +13,7 @@
     <div class="container">
       <a href= "{% url 'imoveis' %}"> <button> Voltar a página anterior </button></a>
       <a href= "{% url 'cadastroproprietario' %}"> <button> Próxima etapa </button></a> <br>
-      <h2> Formlário de cadastro de endereço</h2>
+      <h2>Informe o endereço do imóvel:</h2>
       {% bootstrap_messages %}
       <form action="{% url 'cadastroendereco' %}" method="post" class="form" autocomplete="off" enctype="multipart/form-data">
           {% csrf_token %}

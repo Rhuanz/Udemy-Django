@@ -1,0 +1,29 @@
+{% load bootstrap4 %}
+{% load static %} 
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <title>Atualizar informações de imóvel</title>
+    <meta charset="utf-8">
+    {% bootstrap_css %}
+    <link rel="stylesheet" href="{% static 'css/estilos.css' %}">
+  </head>
+  <body>
+    <div class="container">
+    <a href= "{% url 'imoveis' %}"> <button>Pagina anterior </button></a><br>
+    <div>
+      <h2> Dados do imovel a ser atualizado</h2>
+      {% bootstrap_messages %}
+      <form action="{% url 'atualizarimovel' %}" method="post" class="form" autocomplete="off" enctype="multipart/form-data">
+        {% csrf_token %}
+        {% bootstrap_form form %}
+        {% buttons %}
+            <button type="submit" class="btn btn-primary">Alterar</button>
+        {% endbuttons %}
+      </form><br>
+    </div>
+
+    </div>
+    {% bootstrap_javascript jquery='full' %}
+  </body>
+</html>

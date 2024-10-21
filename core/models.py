@@ -7,7 +7,7 @@ import uuid
 from django.db.models import signals
 from django.template.defaultfilters import slugify
 
-#função para criar um nome aleatório para o arquivo
+#função para criar um nome aleatório para arquivos inseridos no BD
 def get_file_path(_instance, filename):
     ext = filename.split('.')[-1] #Tirando a extenção do arquivo do nome
     filename = f'{uuid.uuid4()}.{ext}' #Criando o nome e juntando a extenção
@@ -78,11 +78,13 @@ class Endereco(Base):
     bairro = models.CharField(name='Bairro', max_length=25)
     num = models.IntegerField(name='Numero')
     cidade = models.CharField(name='Cidade', max_length=30)
-    comp = models.CharField(name = 'Complemento', max_length=8)
+    comp = models.CharField(name = 'Complemento', max_length=8, blank=True)
 
     def __str__(self):
         return f'{self.Rua}, {self.Numero}, {self.Complemento}' #usar os nomes dados as colunas
-
+    
+    def get_id(self):
+        return self.cod
 
 #Classe modelo para imóveis
 class Imovel (Base):
