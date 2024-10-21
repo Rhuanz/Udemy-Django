@@ -9,10 +9,10 @@ from django.http import HttpResponseRedirect
 #Usando class based view
 from django.views.generic import TemplateView
 
-from .models import Corretor, Cliente, Imovel, Endereco
+from .models import Corretor, Cliente, Imovel, Endereco, Visita, Acompanhamento
 from .forms import CorretorModelForm, ImovelModelForm, ClienteModelForm, BuscaCorretorNomeForm
 from .forms import DelCorretorForm, EdtCorretorForm, EnderecoModelForm, ProprietarioModelForm
-from .forms import BuscaImovelCod, BuscaImovelEnd, EdtImovelForm
+from .forms import BuscaImovelCod, BuscaImovelEnd, EdtImovelForm, VisitaModelForm, AcompanhamentoModelForm
 
 
 class IndexView(TemplateView):
@@ -26,7 +26,7 @@ def imoveis(request):
 
         cod = form.cleaned_data['cod']
         form = BuscaImovelCod()
-        try: #o método get do orm retorna exception, por isso a necessidade do try
+        try: #o método get do orm retorna exception caso não encontre o objeto, por isso a necessidade do try
             imoveis = [Imovel.objects.get(CodImovel = cod)]
             messages.success(request, 'Imovel encontrado')
 
@@ -129,6 +129,7 @@ def cadastroendereco(request):
         form.save()
         form = EnderecoModelForm()
         messages.success(request, 'Endereço cadastrado com sucesso!')
+        return HttpResponseRedirect("/cadastroproprietario")
     else:
         form = EnderecoModelForm()
     context = {'form': form}
@@ -140,6 +141,7 @@ def cadastroproprietario(request):
         form.save()
         form = ProprietarioModelForm()
         messages.success(request, 'Proprietario cadastrado com sucesso!')
+        return HttpResponseRedirect("/cadastroimovel")
     else:
         form = ProprietarioModelForm()
     context = {'form': form}
@@ -178,16 +180,15 @@ def corretor(request, nCreci):
 
 def cadastrocorretor(request):
 
-    if str(request.method) == 'POST':
-
-        form = CorretorModelForm(request.POST)
-
+    form = CorretorModelForm(request.POST)
+    if form.has_changed():
         if form.is_valid():
-            
             form.save()
             messages.success(request, 'Corretor cadastrado com sucesso!') #Mensagem de sucesso ao cadastrar corretor
             form = CorretorModelForm() #limpar os dados do formulários preenchido
+            return HttpResponseRedirect("/corretores")
         else:
+            form = CorretorModelForm()
             messages.error(request, 'Erro ao cadastrar corretor')
     else:
         form = CorretorModelForm()
@@ -199,21 +200,21 @@ def cadastrocorretor(request):
 
 def atualizarcorretor(request):
 
-    if str(request.method) == 'POST':
-        form = EdtCorretorForm(request.POST)
+    form = EdtCorretorForm(request.POST)
+    if form.has_changed():
         if form.is_valid():
             creci = form.cleaned_data['creci']
             novonome = form.cleaned_data['novonome']
             status = form.cleaned_data['status']
             form = EdtCorretorForm()
-            if get_object_or_404(Corretor, Creci = creci):
-
-                corretor = Corretor.objects.get(Creci = creci)
+            try:
+                corretor = get_object_or_404(Corretor, Creci = creci)
                 corretor.Nome = novonome
                 corretor.Ativo = status
                 corretor.save()
                 #with connection.cursor() as cursor:
-                    #cursor.execute("UPDATE core_corretor SET nome = %s WHERE creci = %s", [novonome, creci])
+                #cursor.execute("UPDATE core_corretor SET nome = %s WHERE creci = %s", [novonome, creci])
+            except:
                 messages.success(request, 'Corretor atualizado com sucesso!') #Mensagem de sucesso ao cadastrar imóvel
                 return HttpResponseRedirect("/corretores")
             
@@ -229,26 +230,27 @@ def atualizarcorretor(request):
 
 def deletarcorretor(request):
 
-    if str(request.method) == 'POST':
-        form = DelCorretorForm(request.POST)
+    form = DelCorretorForm(request.POST)
+    if form.has_changed():
         if form.is_valid():
-
             nome = form.cleaned_data['nome']
             creci = form.cleaned_data['creci']
             
             form = DelCorretorForm()
-            if get_object_or_404(Corretor, Creci = creci):
-                Corretor.objects.get(Creci = creci, Nome=nome).delete()
+            try:
+                delCorret = get_object_or_404(Corretor, Creci = creci)
+                delCorret.delete()
                 #with connection.cursor() as cursor:
-                    #cursor.execute('DELETE FROM core_corretor WHERE "Creci" = %s AND "Nome" = %s', [creci, nome])
+                #cursor.execute('DELETE FROM core_corretor WHERE "Creci" = %s AND "Nome" = %s', [creci, nome])
                 messages.success(request, 'Corretor deletado com sucesso!') #Mensagem de sucesso ao cadastrar imóvel
-                return HttpResponseRedirect("/corretores")             
-            
+                return HttpResponseRedirect("/corretores")
+            except:
+                messages.error(request, 'Corretor não encontrado!') #Mensagem de sucesso ao cadastrar imóvel
+                return HttpResponseRedirect("/corretores")
         else:
-            form = DelCorretorForm(initial={'nome': ''}) #é necessário um valor inicial para o formulário 
-            
+            form = DelCorretorForm()             
     else:
-        form = DelCorretorForm(initial={'nome': ''}) #é necessário um valor inicial para o formulário 
+        form = DelCorretorForm() #é necessário um valor inicial para o formulário 
     context = {
         'form': form,
     }
@@ -263,9 +265,11 @@ def clientes(request):
     return render(request, 'clientes.html', context)
 
 def cliente(request, codCliente):
-
+    
+    cliente = get_object_or_404(Cliente, CodCliente = codCliente)
+    
     context = {
-        'cliente': get_object_or_404(Cliente, CodCliente = codCliente)
+        'cliente': cliente
     }
     return render(request, 'cliente.html', context)
 
@@ -285,9 +289,41 @@ def cadastrocliente(request):
         form = ClienteModelForm() #Formulário inicial limpo
     context = {
         'form': form
-        }
+    }
     return render(request, 'cadastrocliente.html', context)
 
+def cadastrovisita(request, codCliente):
+    
+    form = VisitaModelForm(request.POST)
+    form2 = AcompanhamentoModelForm(request.POST)
+    cliente = get_object_or_404(Cliente, CodCliente = codCliente)
+    if form.has_changed() and form2.has_changed():
+
+        if form.is_valid() and form2.is_valid():
+            
+            data = form.cleaned_data['DataVisita']
+            imv = form.cleaned_data['imovel']
+            corretor = form2.cleaned_data['corretor']
+
+            nv = Visita(DataVisita = data, imovel= imv, cliente=cliente)
+            nv.save()
+
+            na = Acompanhamento(corretor = corretor, visita = nv)
+            na.save()
+            
+            form = VisitaModelForm()
+            form2 = AcompanhamentoModelForm()
+
+            messages.success(request, 'Visita registrada')
+    else:
+        form = VisitaModelForm()
+        form2 = AcompanhamentoModelForm()
+    context = {
+        'form': form,
+        'form2': form2,
+        'cliente': cliente
+    }
+    return render(request, 'cadastrovisita.html', context)
 
 def error404(request, exception):
 

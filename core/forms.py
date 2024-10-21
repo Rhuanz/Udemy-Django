@@ -1,5 +1,6 @@
 from django import forms
 from .models import Corretor, Cliente, Imovel, Endereco, Proprietario
+from .models import Visita, Acompanhamento
 from stdimage.models import StdImageField
 from .models import get_file_path
 
@@ -34,6 +35,18 @@ class ImovelModelForm(forms.ModelForm):
     class Meta:
         model = Imovel
         fields = ['CodImovel', 'TipoImovel', 'endereco', 'proprietario', 'ValorImovel', 'corretor', 'Disponivel', 'Fotos']
+
+class VisitaModelForm(forms.ModelForm):
+
+    class Meta:
+        model = Visita
+        fields = ['CodVisita', 'imovel', 'DataVisita']
+
+class AcompanhamentoModelForm(forms.ModelForm):
+
+    class Meta:
+        model = Acompanhamento
+        fields = ['corretor']
 
 
 #Demais formulários

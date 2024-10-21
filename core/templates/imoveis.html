@@ -28,7 +28,7 @@
         {% endbuttons %}
       </form><br>
       {% for imovel in imoveis %}
-        <img>{{imovel.Fotos}}
+        <img src="../media/{{imovel.Fotos}}" width="300" height="300"/>
         <h3>{{imovel.TipoImovel}} em {{imovel.endereco.Bairro}}, {{imovel.endereco.Cidade}}<br>
             Por apenas: R$ {{imovel.ValorImovel}} 
         </h3>

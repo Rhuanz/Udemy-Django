@@ -10,7 +10,8 @@
   </head>
   <body>
     <div class="container">
-    <a href= "{% url 'clientes' %}"> <button> Pagina anterior </button></a> <br>
+    <a href= "{% url 'clientes' %}"> <button> Pagina anterior </button></a>
+    <a href= "{% url 'cadastrovisita' cliente.get_cod %}"> <button> Registrar visita </button></a> <br>
     <h1>Dados do cliente:</h1>
     <h3>{{cliente.nome}} <br> 
         Corretor responsável: {{cliente.corretor.Nome}} <br>
