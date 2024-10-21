@@ -9,11 +9,11 @@ from django.http import HttpResponseRedirect
 #Usando class based view
 from django.views.generic import TemplateView
 
-from .models import Corretor, Cliente, Imovel, Endereco, Visita, Acompanhamento
+from .models import Corretor, Cliente, Imovel, Endereco, Visita, Acompanhamento, Venda, Intermedio
 from .forms import CorretorModelForm, ImovelModelForm, ClienteModelForm, BuscaCorretorNomeForm
 from .forms import DelCorretorForm, EdtCorretorForm, EnderecoModelForm, ProprietarioModelForm
 from .forms import BuscaImovelCod, BuscaImovelEnd, EdtImovelForm, VisitaModelForm, AcompanhamentoModelForm
-
+from .forms import VendaModelForm, BuscaVendaCod, BuscaVendaCorretor
 
 class IndexView(TemplateView):
     template_name = 'index.html'
@@ -51,7 +51,8 @@ def imoveis(request):
 
     else:
         imoveis = Imovel.objects.raw('SELECT * FROM core_imovel WHERE "Disponivel" = True')
-        form = BuscaImovelCod(initial={'imoveis': imoveis})
+        form = BuscaImovelCod()
+        form2 = BuscaImovelEnd()
     context = {
         'form': form,
         'form2': form2,
@@ -324,6 +325,66 @@ def cadastrovisita(request, codCliente):
         'cliente': cliente
     }
     return render(request, 'cadastrovisita.html', context)
+
+def vendas(request):
+    form = BuscaVendaCod(request.POST)
+    form2 = BuscaVendaCorretor(request.POST)
+    if form.is_valid() and form.has_changed():
+
+        cod = form.cleaned_data['cod']
+        form = BuscaVendaCod()
+        try: #o método get do orm retorna exception caso não encontre o objeto, por isso a necessidade do try
+            vendas = [Venda.objects.get(CodVenda = cod)]
+            messages.success(request, 'Dados encontrados')
+
+        except:
+            vendas = Venda.objects.all()
+            messages.error(request, 'Código inválido')
+
+    elif form2.is_valid() and form2.has_changed():
+
+        nmcorretor = form2.cleaned_data['corretor']
+        form2 = BuscaVendaCorretor()
+
+        vendas = Venda.objects.raw('SELECT * FROM core_venda WHERE "CodVenda" IN (SELECT venda_id FROM core_intermedio WHERE corretor_id = (SELECT "Creci" FROM core_corretor WHERE "Nome" = %s))', [nmcorretor])
+        
+        if vendas.__len__() > 0:
+            messages.success(request, 'Vendas encontrados')
+        else:
+            vendas = Venda.objects.all()
+            messages.error(request, 'Vendas não encontradas')
+
+    else:
+        vendas = Venda.objects.all()
+        form = BuscaVendaCod()
+        form2 = BuscaVendaCorretor()
+    context = {
+        'form': form,
+        'form2': form2,
+        'vendas': vendas
+    }
+    return render(request, 'vendas.html', context)
+
+def venda(request):
+    pass
+
+def cadastrovenda(request):
+
+    form = VendaModelForm(request.POST)
+
+    if form.is_valid() and form.has_changed():
+        form.save()
+        form = VendaModelForm() #limpar os dados do formulários preenchido
+        messages.success(request, 'Venda registrada!') #Mensagem de sucesso ao cadastrar imóvel
+        return HttpResponseRedirect("/vendas")
+    else:
+        form = VendaModelForm()
+        messages.error(request, 'Erro ao registrar venda')
+
+    context = {
+        'form': form
+    }
+    return render(request, 'cadastrovenda.html', context)
 
 def error404(request, exception):
 

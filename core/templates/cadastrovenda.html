@@ -1,0 +1,29 @@
+{% load bootstrap4 %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <title>Cadastrar venda</title>
+    <meta charset="utf-8">
+    {% bootstrap_css %}
+    <link rel="stylesheet" href="{% static 'css/estilos.css' %}" rel="stylesheet">
+  </head>
+  <body>
+ 
+    <div class="container">
+      <a href= "{% url 'vendas' %}"> <button> Voltar a página anterior </button></a> <br>
+      <h2> Cadastro de venda</h2>
+      {% bootstrap_messages %}
+      <form action="{% url 'cadastrovenda' %}" method="post" class="form" autocomplete="off">
+          {% csrf_token %}
+
+          {% bootstrap_form form %}
+          {% buttons %}
+              <button type="submit" class="btn-primary">Cadastrar</button>
+          {% endbuttons %}
+      </form>
+        
+    </div>
+    {% bootstrap_javascript jquery='full' %}
+  </body>
+</html>

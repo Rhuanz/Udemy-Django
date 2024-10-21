@@ -1,6 +1,6 @@
 from django.urls import path
 from .views import IndexView, imoveis, corretores, corretor, cliente, clientes, imovel, cadastroimovel, cadastrocorretor, cadastrocliente, atualizarcorretor, deletarcorretor
-from .views import cadastroendereco, cadastroproprietario, atualizarimovel, cadastrovisita
+from .views import cadastroendereco, cadastroproprietario, atualizarimovel, cadastrovisita, vendas, venda, cadastrovenda
 urlpatterns = [
     path('', IndexView.as_view(), name = 'index'),
     path('imoveis/', imoveis, name = 'imoveis'),
@@ -18,4 +18,6 @@ urlpatterns = [
     path('cliente/<int:codCliente>', cliente, name='cliente'),
     path('cliente/Cadastro', cadastrocliente, name='cadastrocliente'),
     path('cliente/<int:codCliente>/cadastrovisita', cadastrovisita, name='cadastrovisita'),
+    path('vendas/', vendas, name='vendas'),
+    path('vendas/CadastroVenda', cadastrovenda, name='cadastrovenda'),
 ]

@@ -1,8 +1,6 @@
 from django import forms
 from .models import Corretor, Cliente, Imovel, Endereco, Proprietario
-from .models import Visita, Acompanhamento
-from stdimage.models import StdImageField
-from .models import get_file_path
+from .models import Visita, Acompanhamento, Venda
 
 #formulários modelo pra classes do banco de dados
 class CorretorModelForm(forms.ModelForm):
@@ -48,6 +46,11 @@ class AcompanhamentoModelForm(forms.ModelForm):
         model = Acompanhamento
         fields = ['corretor']
 
+class VendaModelForm(forms.ModelForm):
+
+    class Meta:
+        model = Venda
+        fields = ['CodVenda', 'DataVenda', 'imovel', 'cliente', 'FormaPagamento', 'Entrada', 'ValorFinal']
 
 #Demais formulários
 class BuscaCorretorNomeForm(forms.Form):
@@ -80,5 +83,10 @@ class EdtImovelForm(forms.Form):
     tipo = forms.CharField(label='Tipo do imóvel:', required = False)
     valor = forms.DecimalField(label='Novo valor:', required = False)
     disponivel = forms.BooleanField(label = 'Continua disponível?', required = False)
-    #fotos = StdImageField(name='Fotos', upload_to=get_file_path, variations={'thumb': (300, 300)})
     fotos = forms.ImageField(label='Fotos do imóvel:',required = False)
+
+class BuscaVendaCod(forms.Form):
+    cod = forms.IntegerField(label='Codigo da venda:', required=False)
+
+class BuscaVendaCorretor(forms.Form):
+    corretor = forms.CharField(label='Nome do corretor:', required=False)

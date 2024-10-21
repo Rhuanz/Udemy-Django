@@ -1,0 +1,40 @@
+{% load bootstrap4 %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <title>Vendas</title>
+    <meta charset="utf-8">
+    {% bootstrap_css %}
+    <link rel="stylesheet" href="{% static 'css/estilos.css' %}">
+  </head>
+  <body>
+    <div class="container">
+      <a href= "{% url 'index'%}"> <button> Pagina anterior </button></a>
+      <a href= "{% url 'cadastrovenda'%}"> <button> Registrar venda </button></a><br>
+      
+      <h1> Vendas realizadas:</h1> <br>
+      {% bootstrap_messages %}
+
+      <form action="{% url 'vendas' %}" method="post" class="form" autocomplete="off">
+        {% csrf_token %}
+        {% bootstrap_form form %}
+        {% buttons %}
+            <button type="submit" class="btn btn-primary">Buscar</button>
+        {% endbuttons %}
+        {% bootstrap_form form2 %}
+        {% buttons %}
+            <button type="submit" class="btn btn-primary">Buscar</button>
+        {% endbuttons %}
+      </form><br>
+      {% for venda in vendas %}
+        <h3>Data da venda: {{venda.DataVenda}}<br>
+            Endereço do imóvel: {{venda.imovel.endereco.Bairro}}, {{venda.imovel.endereco.Cidade}}<br>
+            Valor da venda: R$ {{venda.ValorFinal}} <br>
+            Comprador: {{venda.cliente.Nome}}<br>
+        </h3>
+      {% endfor %}
+    </div>
+    {% bootstrap_javascript jquery='full' %}
+  </body>
+</html>

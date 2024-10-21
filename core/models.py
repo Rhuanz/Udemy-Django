@@ -128,12 +128,12 @@ class Acompanhamento (Base):
 class Venda (Base):
 
     cod = models.AutoField(name='CodVenda', primary_key=True, db_index=True)
-    data = models.DateField(name='Data da venda')
+    data = models.DateField(name='DataVenda')
     imovel = models.OneToOneField(Imovel, on_delete=models.CASCADE)
     cliente = models.ForeignKey(Cliente, on_delete=models.CASCADE)
-    fPagamento = models.CharField(name='Forma de pagamento', max_length=50)
+    fPagamento = models.CharField(name='FormaPagamento', max_length=50) #alterar para seleção
     entrada = models.BooleanField(name='Entrada', default=True)
-    valorF = models.DecimalField(name='Valor final', max_digits=9, decimal_places=2)
+    valorF = models.DecimalField(name='ValorFinal', max_digits=9, decimal_places=2)
 
     def __str__(self):
         return f'{self.CodVenda}, {self.cliente}, {self.imovel}'
